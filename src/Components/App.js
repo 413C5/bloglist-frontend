@@ -74,6 +74,7 @@ const App = () => {
       showMessage(`Welcome ${user.name}`, true)
     }
     catch (error) {
+      showMessage(`wrong username or password`, false)
     }
   }
 
@@ -104,6 +105,7 @@ const App = () => {
       .create(newBlog)
       .then(createdBlog => {
         setBlogs(blogs.concat(createdBlog))
+        showMessage(`a new blog ${createdBlog.title} by ${createdBlog.author} added`, true)
         resetFields()
       })
       .catch(error => {
@@ -187,17 +189,15 @@ const App = () => {
     <div>
       <Notification message={message} state={state} />
       {/* Conditional rendering */}
-      {user === null ?
-        (<div>
-          {LoginForm()}
-        </div>
-        )
-        :
-        (<div>
-
-          {BlogForm()}
-        </div>
-        )
+      {
+        user === null ?
+          (<div>
+            {LoginForm()}
+          </div>)
+          :
+          (<div>
+            {BlogForm()}
+          </div>)
       }
     </div>
   )
