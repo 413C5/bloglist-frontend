@@ -98,11 +98,13 @@ const App = () => {
   return (
     <div>
       <Notification message={message} state={state} />
+      {/* Conditional rendering */}
       {user === null ?
         (<div>
           {loginForm()}
         </div>
-        ) :
+        )
+        :
         (<div>
           {blogForm()}
         </div>
