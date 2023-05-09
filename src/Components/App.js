@@ -3,6 +3,8 @@ import Blog from './Blog'
 import Notification from './Notification'
 import blogService from '../Services/blogs'
 import loginService from '../Services/login'
+import LoginForm from './LoginForm'
+import BlogForm from './BlogForm'
 
 const App = () => {
 
@@ -113,90 +115,33 @@ const App = () => {
       })
   }
 
-  const BlogForm = () => {
-    return (
-      <div>
-        <form onSubmit={handleBlogCreation}>
-          <h1>blogs</h1>
-          {/* Logout */}
-          <div>
-            <p>
-              {user.name} logged in <button onClick={handleLogout}>logout</button>
-            </p>
-          </div>
-          {/* Add blogs */}
-          <div>
-            <h1>create new</h1>
-            title:
-            <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} />
-            <br />
-            author:
-            <input type="text" value={author} name="author" onChange={({ target }) => setAuthor(target.value)} />
-            <br />
-            url:
-            <input type="text" value={url} name="url" onChange={({ target }) => setUrl(target.value)} />
-            <br />
-            <button type="submit">create </button>
-          </div>
-          <div>
-            {showBlogs()}
-          </div>
-        </form>
-      </div>
-    )
-  }
-
-  const showBlogs = () => {
-    return (
-      blogs.map(blog => {
-        return (
-          <Blog key={blog.id} blog={blog} />
-        )
-      })
-    )
-  }
-
-  const LoginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          <h1>log in to application</h1>
-          username:
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password:
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">
-          login
-        </button>
-      </form>
-    )
-  }
-
   return (
     <div>
       <Notification message={message} state={state} />
       {/* Conditional rendering */}
       {
         user === null ?
-          (<div>
-            {LoginForm()}
-          </div>)
+          (<LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            password={password}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+          />)
           :
           (<div>
-            {BlogForm()}
+            <BlogForm
+              handleBlogCreation={handleBlogCreation}
+              user={user}
+              handleLogout={handleLogout}
+              title={title}
+              handleTitleChange={({ target }) => setTitle(target.value)}
+              author={author}
+              handleAuhtorChange={({ target }) => setAuthor(target.value)}
+              url={url}
+              handleUrlChange={({ target }) => setUrl(target.value)}
+              blogs={blogs}
+            />
           </div>)
       }
     </div>
