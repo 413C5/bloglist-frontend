@@ -23,6 +23,16 @@ const App = () => {
       )
   }, [])
 
+  //Stores user in local storage
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   //Sets message and color
   const showMessage = (message, state) => {
     setMessage(message)
@@ -41,6 +51,10 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+      //Local storage
+      window.localStorage.setItem(
+        'loggedBloglistUser', JSON.stringify(user)
+      )
       //Method is called when there is a succesfull login
       blogService.setToken(user.token)
       //Create new blogs
@@ -54,7 +68,41 @@ const App = () => {
     }
   }
 
-  const loginForm = () => {
+  //Method to manage user logout
+  const handleLogout = async (event) => {
+    event.preventDefault()
+    try {
+      showMessage(`${user.name} logout`, true)
+      window.localStorage.clear()
+      blogService.setToken(null)
+      setUser(null)
+      setUsername('')
+      setPassword('')
+    }
+    catch (error) {
+      showMessage(`Something went wrong, try to logout again`, true)
+    }
+  }
+
+  const BlogForm = () => {
+    return (
+      <div>
+        <h1>blogs</h1>
+        <p>
+          {user.name} logged in <button onClick={handleLogout}>logout</button>
+        </p>
+        {
+          blogs.map(blog => {
+            return (
+              <Blog key={blog.id} blog={blog} />
+            )
+          })
+        }
+      </div>
+    )
+  }
+
+  const LoginForm = () => {
     return (
       <form onSubmit={handleLogin}>
         <div>
@@ -83,30 +131,18 @@ const App = () => {
     )
   }
 
-  const blogForm = () => {
-    return (
-      <div>
-        <h1>blogs</h1>
-        <p> {user.name} logged in </p>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
-    )
-  }
-
   return (
     <div>
       <Notification message={message} state={state} />
       {/* Conditional rendering */}
       {user === null ?
         (<div>
-          {loginForm()}
+          {LoginForm()}
         </div>
         )
         :
         (<div>
-          {blogForm()}
+          {BlogForm()}
         </div>
         )
       }
