@@ -91,6 +91,8 @@ const App = () => {
       })
   }
 
+  const sortedBlogs=blogs.sort((a, b) => b.likes - a.likes)
+
   return (
     <div>
       <Notification message={message} state={state} />
@@ -115,7 +117,7 @@ const App = () => {
               <Toggable buttonLabel='create new blog' ref={blogFormRef}>
                 <BlogForm createBlog={addBlog} />
               </Toggable>
-              <ShowBlogs blogs={blogs}/>
+              <ShowBlogs blogs={sortedBlogs}/>
             </div>
 
           )
