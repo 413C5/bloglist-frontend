@@ -4,14 +4,12 @@ import blogService from '../Services/blogs'
 import loginService from '../Services/login'
 import LoginForm from './LoginForm'
 import BlogForm from './BlogForm'
+import ShowBlogs from "./ShowBlogs";
 
 const App = () => {
 
   const [blogs, setBlogs] = useState([]) //Manage blogs
   const [user, setUser] = useState(null) //Login 
-  const [title, setTitle] = useState('')  //Adding blogs
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [state, setState] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -46,14 +44,6 @@ const App = () => {
     }, 5000)
   }
 
-  const resetFields = () => {
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    /* setUsername('')
-    setPassword('') */
-  }
-
   //Succesor to handleLogin
   const loginUser = (userObject) => {
     loginService
@@ -79,32 +69,22 @@ const App = () => {
       window.localStorage.clear()
       blogService.setToken(null)
       setUser(null)
-      resetFields()
     }
     catch (error) {
-      showMessage(`Something went wrong, try to logout again`, true)
+      showMessage(`Something went wrong, try to logout again`, false)
     }
   }
 
-
-  //handleBlogCreation
-  const handleBlogCreation = async (event) => {
-    event.preventDefault()
-
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
-    }
+  //Succesor to handleBlogCreation
+  const addBlog = (blogObject) => {
     blogService
-      .create(newBlog)
-      .then(createdBlog => {
-        setBlogs(blogs.concat(createdBlog))
-        showMessage(`a new blog ${createdBlog.title} by ${createdBlog.author} added`, true)
-        resetFields()
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        showMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, true)
       })
       .catch(error => {
-        showMessage(`Something went wrong: `, error.response.data.error)
+        showMessage(`Something went wrong: ${error.response.data.error}`, false)
       })
   }
 
@@ -119,20 +99,20 @@ const App = () => {
             <LoginForm loginHelper={loginUser} />
           )
           :
-          (<div>
-            <BlogForm
-              handleBlogCreation={handleBlogCreation}
-              user={user}
-              handleLogout={handleLogout}
-              title={title}
-              handleTitleChange={({ target }) => setTitle(target.value)}
-              author={author}
-              handleAuhtorChange={({ target }) => setAuthor(target.value)}
-              url={url}
-              handleUrlChange={({ target }) => setUrl(target.value)}
-              blogs={blogs}
-            />
-          </div>)
+          (
+            <div>
+              {/* Logout */}
+              <div>
+                <p>
+                  {user.name} logged in <button onClick={handleLogout}>logout</button>
+                </p>
+              </div>
+              {/* Blog Form and show blogs */}
+              <BlogForm createBlog={addBlog} />
+              <ShowBlogs blogs={blogs} />
+            </div>
+
+          )
       }
     </div>
   )

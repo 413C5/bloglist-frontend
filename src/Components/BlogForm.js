@@ -1,44 +1,44 @@
-import React from "react";
-import ShowBlogs from "./ShowBlogs";
+import React,{useState} from "react";
 
-const BlogForm = ({
-    handleBlogCreation,
-    user,
-    handleLogout,
-    title,
-    handleTitleChange,
-    author,
-    handleAuhtorChange,
-    url,
-    handleUrlChange,
-    blogs
-}) => {
+const BlogForm = ({ createBlog}) => {
+    const [title, setTitle] = useState('')  //Adding blogs
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+
+    const resetFields = () => {
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+    }
+
+    const addBlog = (event) => {
+        event.preventDefault()
+
+        createBlog({
+            title: title,
+            author: author,
+            url: url
+        })
+        resetFields()
+    }
+
     return (
         <div>
-            <form onSubmit={handleBlogCreation}>
+            <form onSubmit={addBlog}>
                 <h1>blogs</h1>
-                {/* Logout */}
-                <div>
-                    <p>
-                        {user.name} logged in <button onClick={handleLogout}>logout</button>
-                    </p>
-                </div>
                 {/* Add blogs */}
                 <div>
                     <h1>create new</h1>
                     title:
-                    <input type="text" value={title} name="title" onChange={handleTitleChange} />
+                    <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} />
                     <br />
                     author:
-                    <input type="text" value={author} name="author" onChange={handleAuhtorChange} />
+                    <input type="text" value={author} name="author" onChange={({ target }) => setAuthor(target.value)} />
                     <br />
                     url:
-                    <input type="text" value={url} name="url" onChange={handleUrlChange} />
+                    <input type="text" value={url} name="url" onChange={({ target }) => setUrl(target.value)} />
                     <br />
                     <button type="submit">create </button>
-                </div>
-                <div>
-                    <ShowBlogs blogs={blogs} />
                 </div>
             </form>
         </div>
