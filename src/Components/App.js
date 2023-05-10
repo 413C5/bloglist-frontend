@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './Blog'
 import Notification from './Notification'
 import blogService from '../Services/blogs'
 import loginService from '../Services/login'
@@ -10,8 +9,6 @@ const App = () => {
 
   const [blogs, setBlogs] = useState([]) //Manage blogs
   const [user, setUser] = useState(null) //Login 
-  const [username, setUsername] = useState('') //Credentials
-  const [password, setPassword] = useState('')
   const [title, setTitle] = useState('')  //Adding blogs
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -23,8 +20,8 @@ const App = () => {
   useEffect(() => {
     blogService
       .getAll()
-      .then(blogs =>
-        setBlogs(blogs)
+      .then(initialBlogs =>
+        setBlogs(initialBlogs)
       )
   }, [])
 
@@ -53,31 +50,25 @@ const App = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    setUsername('')
-    setPassword('')
+    /* setUsername('')
+    setPassword('') */
   }
 
-  //Method to manage user login
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username, password,
+  //Succesor to handleLogin
+  const loginUser = (userObject) => {
+    loginService
+      .login(userObject)
+      .then(returnedUser => {
+        setUser(returnedUser)
+        blogService.setToken(returnedUser.token)
+        window.localStorage.setItem(
+          'loggedBloglistUser', JSON.stringify(returnedUser)
+        )
+        showMessage(`Welcome ${returnedUser.name}`, true)
       })
-      //Local storage
-      window.localStorage.setItem(
-        'loggedBloglistUser', JSON.stringify(user)
-      )
-      //Method is called when there is a succesfull login
-      blogService.setToken(user.token)
-      //Create new blogs
-      setUser(user)
-      resetFields()
-      showMessage(`Welcome ${user.name}`, true)
-    }
-    catch (error) {
-      showMessage(`wrong username or password`, false)
-    }
+      .catch(error => {
+        showMessage(`wrong username or password`, false)
+      })
   }
 
   //Method to manage user logout
@@ -95,6 +86,8 @@ const App = () => {
     }
   }
 
+
+  //handleBlogCreation
   const handleBlogCreation = async (event) => {
     event.preventDefault()
 
@@ -120,14 +113,11 @@ const App = () => {
       <Notification message={message} state={state} />
       {/* Conditional rendering */}
       {
-        user === null ?
-          (<LoginForm
-            handleLogin={handleLogin}
-            username={username}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            password={password}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-          />)
+        user === null
+          ?
+          (
+            <LoginForm loginHelper={loginUser} />
+          )
           :
           (<div>
             <BlogForm
