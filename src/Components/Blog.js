@@ -1,10 +1,33 @@
 import React, { useState } from 'react'
+import blogService from '../Services/blogs'
 
 const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
+  const [updatedLikes, setLikes] = useState(blog.likes)
 
-  const addLike = () => {
-    console.log('+1 likes')
+  const findBlogAddUser = async (blogId) => {
+    const allBlogs = await blogService.getAll()
+    const blogToUpdate = allBlogs.find(n => n.id === blogId)
+
+    return
+    (
+      { ...blogToUpdate, user: blogToUpdate.user.id }
+    )
+  }
+
+  //Now it works
+  const addLike = (blogId) => {
+    const blogWithUser = findBlogAddUser(blogId)
+
+    blogService
+      .updateLike(blogId, blogWithUser)
+      .then(returnedBlog => {
+        setLikes(returnedBlog.likes)
+        console.log(`${returnedBlog.title} now has ${returnedBlog.likes} likes`)
+      })
+      .catch(error => {
+        console.log('something went wrong')
+      })
   }
 
   const contentToShow = (() => {
@@ -13,7 +36,7 @@ const Blog = ({ blog }) => {
         <div>
           <p>{blog.url}</p>
           <p>
-            likes {blog.likes} <button onClick={addLike}>like</button>
+            likes {updatedLikes} <button onClick={() => addLike(blog.id)}>like</button>
           </p>
           <p>{blog.author}</p>
         </div>
