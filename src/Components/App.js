@@ -7,11 +7,9 @@ import BlogForm from './BlogForm'
 import ShowBlogs from './ShowBlogs'
 import Toggable from './Toggable'
 
-
 const App = () => {
-
-  const [blogs, setBlogs] = useState([]) //Manage blogs
-  const [user, setUser] = useState(null) //Login 
+  const [blogs, setBlogs] = useState([])//Manage blogs
+  const [user, setUser] = useState(null)//Login
   const [state, setState] = useState(false)
   const [message, setMessage] = useState(null)
   const blogFormRef = useRef()
@@ -59,7 +57,7 @@ const App = () => {
         showMessage(`Welcome ${returnedUser.name}`, true)
       })
       .catch(error => {
-        showMessage(`wrong username or password`, false)
+        showMessage('wrong username or password', false)
       })
   }
 
@@ -73,7 +71,7 @@ const App = () => {
       setUser(null)
     }
     catch (error) {
-      showMessage(`Something went wrong, try to logout again`, false)
+      showMessage('Something went wrong, try to logout again', false)
     }
   }
 
