@@ -91,7 +91,28 @@ const App = () => {
       })
   }
 
-  const sortedBlogs=blogs.sort((a, b) => b.likes - a.likes)
+  const removeBlog = (blogObject) => {
+    const blogId = blogObject.id
+    const blogTitle = blogObject.title
+    const blogAuthor = blogObject.author
+
+    if (window.confirm(`Remove ${blogTitle} by ${blogAuthor}`)) {
+
+      blogService
+        .remove(blogId)
+        .then(() => {
+          showMessage(`Removed blog ${blogTitle}`, true)
+          console.log(`Removed blog ${blogTitle}`)
+          setBlogs(blogs.filter(n => n.id !== blogId))
+        })
+        .catch(error => {
+          showMessage(`You cannot remove blogs added by another user ${error.response.data.error}`, false)
+          console.log(`You cannot remove blogs added by another user ${error.response.data.error}`)
+        })
+    }
+  }
+
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
@@ -117,7 +138,7 @@ const App = () => {
               <Toggable buttonLabel='create new blog' ref={blogFormRef}>
                 <BlogForm createBlog={addBlog} />
               </Toggable>
-              <ShowBlogs blogs={sortedBlogs}/>
+              <ShowBlogs blogs={sortedBlogs} user={user} removeBlog={removeBlog} showMessage={showMessage} />
             </div>
 
           )
