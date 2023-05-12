@@ -24,23 +24,21 @@ const Blog = ({ blog, user, removeBlog, showMessage }) => {
   }
 
   const handleDelete = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (blog && blog.user && blog.user.username === user.username) {
-      removeBlog(blog);
+      removeBlog(blog)
     }
     else {
-      showMessage(`You are not authorized to delete this blog`, false)
-      console.log('You are not authorized to delete this blog');
+      showMessage('You are not authorized to delete this blog', false)
+      console.log('You are not authorized to delete this blog')
     }
-  };
-
-
+  }
 
   const contentToShow = (() => {
     if (showDetails === true) {
       return (
-        <div>
+        <div className='extra-info'>
           <p>{blog.url}</p>
           <p>
             likes {updatedLikes} <button onClick={() => addLike(blog)}>like</button>
@@ -57,9 +55,12 @@ const Blog = ({ blog, user, removeBlog, showMessage }) => {
 
   /* console.log(blog) */
   return (
-    <div className="blogStyle">
-      <div>
-        {blog.title} {' '} {blog.author}<button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
+    <div className='blogStyle'>
+      <div className='title and author'>
+        <p>
+          {blog.title} {' '} {blog.author}
+        </p>
+        <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
       </div>
       {contentToShow}
     </div>
