@@ -6,7 +6,7 @@ import Blog from './Blog'
 import BlogForm from './BlogForm'
 
 
-describe('<Blog />', () => {
+describe('1.-Blog render', () => {
     let component
     const showMessage = jest.fn()
     const removeBlog= jest.fn()
@@ -31,8 +31,11 @@ describe('<Blog />', () => {
     })
   
     test('renders title and author but not url or likes by default', () => {
-      expect(component.container.querySelector('.title and author')).toHaveTextContent(
-        blog.title,' ',blog.author
+      expect(component.container.querySelector('.title')).toHaveTextContent(
+        blog.title
+      )
+      expect(component.container.querySelector('.author')).toHaveTextContent(
+        blog.author
       )
       expect(component.queryByText(blog.url)).not.toBeInTheDocument()
       expect(component.queryByText('like')).not.toBeInTheDocument()

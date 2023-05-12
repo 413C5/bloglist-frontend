@@ -56,9 +56,12 @@ const Blog = ({ blog, user, removeBlog, showMessage }) => {
   /* console.log(blog) */
   return (
     <div className='blogStyle'>
-      <div className='title and author'>
-        <p>
-          {blog.title} {' '} {blog.author}
+      <div>
+        <p className='title'>
+          {blog.title}
+        </p>
+        <p className='author'>
+          {blog.author}
         </p>
         <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
       </div>
