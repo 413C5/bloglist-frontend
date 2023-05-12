@@ -63,7 +63,7 @@ const Blog = ({ blog, user, removeBlog, showMessage }) => {
         <p className='author'>
           {blog.author}
         </p>
-        <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
+        <button className='button' onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
       </div>
       {contentToShow}
     </div>
