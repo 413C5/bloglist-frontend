@@ -75,7 +75,7 @@ describe('1.-Blog render', () => {
 
         const likeButton = component.getByText('like')
 
-        console.log(likeButton)
+        /* console.log(likeButton) */
 
         fireEvent.click(likeButton)
         expect(addLike.mock.calls).toHaveLength(1)
