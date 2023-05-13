@@ -1,26 +1,15 @@
 import React, { useState } from 'react'
-import blogService from '../Services/blogs'
 
-const Blog = ({ blog, user, removeBlog, showMessage }) => {
+const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
   const [showDetails, setShowDetails] = useState(false)
-  const [updatedLikes, setLikes] = useState(blog.likes)
-
-
-  /* console.log(blog.user.username,user.username) */
-
-  //Now it works
-  const addLike = (blog) => {
-    blogService
-      .updateLike(blog.id, blog)
-      .then(returnedBlog => {
-        setLikes(returnedBlog.likes)
-        console.log(`${returnedBlog.title} now has ${returnedBlog.likes} likes`)
-        showMessage(`${returnedBlog.title} now has ${returnedBlog.likes} likes`, true)
-      })
-      .catch(error => {
-        showMessage(`something went wrong ${error}`, false)
-        console.log('something went wrong')
-      })
+  
+  const handleLike = (event) => {
+    event.preventDefault();
+    const blogToUpdate = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+    addLike(blogToUpdate)
   }
 
   const handleDelete = (event) => {
@@ -41,7 +30,7 @@ const Blog = ({ blog, user, removeBlog, showMessage }) => {
         <div className='extra-info'>
           <p>{blog.url}</p>
           <p>
-            likes {updatedLikes} <button onClick={() => addLike(blog)}>like</button>
+            likes {blog.likes} <button className='buttonLike' onClick={handleLike}>like</button>
           </p>
           {/* <p>{blog.author}</p> */}
           <p>

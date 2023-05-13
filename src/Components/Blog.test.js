@@ -1,14 +1,16 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
+import blogService from '../Services/blogs'
 
 describe('1.-Blog render', () => {
     let component
     const showMessage = jest.fn()
     const removeBlog = jest.fn()
+    const addLike = jest.fn()
     const blog = {
         id: 'abcdefghi',
         title: 'Title',
@@ -28,6 +30,7 @@ describe('1.-Blog render', () => {
                 /* user={user} */
                 removeBlog={removeBlog}
                 showMessage={showMessage}
+                addLike={addLike}
             />
         )
     })
@@ -65,4 +68,43 @@ describe('1.-Blog render', () => {
         expect(component.queryByText(blog.url)).toBeInTheDocument()
         expect(component.queryByText('like')).toBeInTheDocument()
     })
+
+    /*   test('clicking the like button twice calls the event handler twice', () => {
+        const viewButton = component.container.querySelector('.button')
+        fireEvent.click(viewButton)
+      
+        const likeButton = component.container.querySelector('.buttonLike')
+
+
+        //fireEvent.click(likeButton)
+        // expect(updateBlog.mock.calls).toHaveLength(1) 
+        
+        //fireEvent.click(likeButton)
+        // expect(updateBlog.mock.calls).toHaveLength(2) 
+
+        //console.log(addLike.mock)
+        //expect(addLike.mock.calls).toHaveLength(2)
+      })*/
+
+      test('clicking the like button twice calls the event handler twice', () => {
+        const mockHandler = jest.fn()
+      
+        const component = render(
+          <Blog
+            key={blog.id}
+            blog={blog}
+            /* user={user} */
+            removeBlog={removeBlog}
+            showMessage={showMessage}
+            addLike={mockHandler}
+          />
+        )
+      
+        const likeButton = component.getByText('like')
+        fireEvent.click(likeButton)
+        fireEvent.click(likeButton)
+      
+        expect(mockHandler.mock.calls).toHaveLength(2)
+      })
+
 })
