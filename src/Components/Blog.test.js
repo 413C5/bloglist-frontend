@@ -69,42 +69,19 @@ describe('1.-Blog render', () => {
         expect(component.queryByText('like')).toBeInTheDocument()
     })
 
-    /*   test('clicking the like button twice calls the event handler twice', () => {
-        const viewButton = component.container.querySelector('.button')
-        fireEvent.click(viewButton)
-      
-        const likeButton = component.container.querySelector('.buttonLike')
+    test('event handler is called twice when button is clicked twice', () => {
+        const button = component.container.querySelector('button')
+        fireEvent.click(button)
 
-
-        //fireEvent.click(likeButton)
-        // expect(updateBlog.mock.calls).toHaveLength(1) 
-        
-        //fireEvent.click(likeButton)
-        // expect(updateBlog.mock.calls).toHaveLength(2) 
-
-        //console.log(addLike.mock)
-        //expect(addLike.mock.calls).toHaveLength(2)
-      })*/
-
-      test('clicking the like button twice calls the event handler twice', () => {
-        const mockHandler = jest.fn()
-      
-        const component = render(
-          <Blog
-            key={blog.id}
-            blog={blog}
-            /* user={user} */
-            removeBlog={removeBlog}
-            showMessage={showMessage}
-            addLike={mockHandler}
-          />
-        )
-      
         const likeButton = component.getByText('like')
+
+        console.log(likeButton)
+
         fireEvent.click(likeButton)
+        expect(addLike.mock.calls).toHaveLength(1)
+
         fireEvent.click(likeButton)
-      
-        expect(mockHandler.mock.calls).toHaveLength(2)
-      })
+        expect(addLike.mock.calls).toHaveLength(2)
+    })
 
 })
