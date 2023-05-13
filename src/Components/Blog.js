@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 
 const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
   const [showDetails, setShowDetails] = useState(false)
-  
+
   const handleLike = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     const blogToUpdate = {
       ...blog,
       likes: blog.likes + 1,
-    };
+    }
     addLike(blogToUpdate)
   }
 
@@ -18,7 +18,9 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
     if (blog && blog.user && blog.user.username === user.username) {
       removeBlog(blog)
     }
+
     else {
+      console.log(blog.user.username,' ',user.username)
       showMessage('You are not authorized to delete this blog', false)
       console.log('You are not authorized to delete this blog')
     }

@@ -92,16 +92,16 @@ const App = () => {
   //Now it works
   const addLike = async (blogToUpdate) => {
     try {
-      const updatedBlog = await blogService.update(blogToUpdate.id, blogToUpdate);
-      const newBlogs = blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog));
-      setBlogs(newBlogs);
-      showMessage(`Liked blog ${updatedBlog.title}`, true);
-    } 
-    catch (error) {
-      showMessage(`Failed to like blog ${blogToUpdate.title}: ${error.response.data.error}`, false);
+      const updatedBlog = await blogService.update(blogToUpdate.id, blogToUpdate)
+      const newBlogs = blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+      setBlogs(newBlogs)
+      showMessage(`Liked blog ${updatedBlog.title}`, true)
     }
-  };
-  
+    catch (error) {
+      showMessage(`Failed to like blog ${blogToUpdate.title}: ${error.response.data.error}`, false)
+    }
+  }
+
   const removeBlog = (blogObject) => {
     const blogId = blogObject.id
     const blogTitle = blogObject.title
