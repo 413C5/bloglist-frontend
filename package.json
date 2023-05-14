@@ -23,7 +23,8 @@
     "server": "json-server -p3003 --watch db.json",
     "dev": "nodemon index.js",
     "lint": "eslint .",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "eslintConfig": {
     "extends": [

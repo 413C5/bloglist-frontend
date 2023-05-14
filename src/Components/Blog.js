@@ -5,6 +5,7 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
 
   const handleLike = (event) => {
     event.preventDefault()
+    console.log(blog.user.username,' ',user.username)
     const blogToUpdate = {
       ...blog,
       likes: blog.likes + 1,
@@ -14,13 +15,14 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
 
   const handleDelete = (event) => {
     event.preventDefault()
-
+    console.log(blog.user.username,' ',user.username)
+    //console.log('Blog',blog)
+    //console.log('user',user)
     if (blog && blog.user && blog.user.username === user.username) {
       removeBlog(blog)
     }
 
     else {
-      console.log(blog.user.username,' ',user.username)
       showMessage('You are not authorized to delete this blog', false)
       console.log('You are not authorized to delete this blog')
     }
