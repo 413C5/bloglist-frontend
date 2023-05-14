@@ -57,7 +57,7 @@ const App = () => {
         showMessage(`Welcome ${returnedUser.name}`, true)
       })
       .catch(error => {
-        showMessage('wrong username or password', false)
+        showMessage(`wrong username or password:${error}`, false)
       })
   }
 
@@ -77,6 +77,7 @@ const App = () => {
 
   //Succesor to handleBlogCreation
   const addBlog = (blogObject) => {
+    event.preventDefault()
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
@@ -90,15 +91,24 @@ const App = () => {
   }
 
   //Now it works
-  const addLike = async (blogToUpdate) => {
+  const addLike = async (blog) => {
     try {
-      const updatedBlog = await blogService.update(blogToUpdate.id, blogToUpdate)
-      const newBlogs = blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+      await blogService.update(blog.id, {
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes,
+      })
+      showMessage(`Liked blog ${blog.title} now has ${blog.likes} `, true)
+      const newBlogs = blogs.map((currentBlog) =>
+        currentBlog.id === blog.id
+          ? { ...currentBlog, likes: currentBlog.likes + 1 }
+          : currentBlog
+      )
       setBlogs(newBlogs)
-      showMessage(`Liked blog ${updatedBlog.title}`, true)
     }
     catch (error) {
-      showMessage(`Failed to like blog ${blogToUpdate.title}: ${error.response.data.error}`, false)
+      showMessage(`Failed to like blog ${blog.title}: ${error.response.data.error}`, false)
     }
   }
 

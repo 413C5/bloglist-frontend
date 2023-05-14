@@ -1,24 +1,23 @@
 import React, { useState } from 'react'
+import blogService from '../Services/blogs'
 
 const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
   const [showDetails, setShowDetails] = useState(false)
 
-  const handleLike = (event) => {
-    //event.preventDefault()
+  const handleLike = () => {
     //console.log(blog.user.username,' ',user.username)
-    const blogToUpdate = {
+    addLike({
       ...blog,
       likes: blog.likes + 1,
-    }
-    addLike(blogToUpdate)
+    })
   }
 
   const handleDelete = (event) => {
-    event.preventDefault()
+    //event.preventDefault()
     //console.log(blog.user.username,' ',user.username)
     //console.log('Blog',blog)
     //console.log('user',user)
-    if (blog && blog.user && blog.user.username === user.username) {
+    if (blog.user.username === user.username) {
       removeBlog(blog)
     }
 
@@ -40,7 +39,7 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
           <p>
             {blog.user.username}
           </p>
-          <button onClick={handleDelete}>remove</button>
+          <button className='remove' onClick={handleDelete}>remove</button>
         </div>
       )
     }
