@@ -4,8 +4,8 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const handleLike = (event) => {
-    event.preventDefault()
-    console.log(blog.user.username,' ',user.username)
+    //event.preventDefault()
+    //console.log(blog.user.username,' ',user.username)
     const blogToUpdate = {
       ...blog,
       likes: blog.likes + 1,
@@ -15,7 +15,7 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
 
   const handleDelete = (event) => {
     event.preventDefault()
-    console.log(blog.user.username,' ',user.username)
+    //console.log(blog.user.username,' ',user.username)
     //console.log('Blog',blog)
     //console.log('user',user)
     if (blog && blog.user && blog.user.username === user.username) {
@@ -56,7 +56,7 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
         <p className='author'>
           {blog.author}
         </p>
-        <button className='button' onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
+        <button className='button' id='show-more' onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
       </div>
       {contentToShow}
     </div>
