@@ -4,6 +4,13 @@ describe('Blog app', function () {
     name: 'Admin',
     password: 'admin1234',
   }
+
+  const badUserTest = {
+    username: 'badadmin',
+    name: 'BadAdmin',
+    password: 'badadmin1234',
+  }
+
   const blogTest = {
     title: 'Blog title',
     author: 'Blog Author name',
@@ -13,6 +20,7 @@ describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     cy.request('POST', 'http://localhost:3001/api/users', userTest)
+    cy.request('POST', 'http://localhost:3001/api/users', badUserTest)
     cy.visit('http://localhost:3000')
   })
 
@@ -114,6 +122,57 @@ describe('Blog app', function () {
 
         expect(data).to.have.length(0)
       })
+    })
+
+    it('Another user cannot delete other user blog', function () {
+      cy.contains('new blog').click()
+      cy.get('#title').type(blogTest.title)
+      cy.get('#author').type(blogTest.author)
+      cy.get('#url').type(blogTest.url)
+      cy.get('#submit-blog').click()
+      cy.wait(1000)
+      cy.wait(1000)
+      cy.wait(1000)
+      cy.wait(1000)
+
+      cy.request('GET', 'http://localhost:3001/api/blogs').then((response) => {
+        const data = response.body
+        expect(data).to.have.length(1)
+        expect(data[0].title).contains(blogTest.title)
+        expect(data[0].author).contains(blogTest.author)
+        expect(data[0].url).contains(blogTest.url)
+      })
+
+      //Admin logout
+      cy.get('#logout').click()
+
+      //Bad user gets in
+      cy.get('#username').type(badUserTest.username)
+      cy.get('#password').type(badUserTest.password)
+      cy.get('#login-button').click()
+
+      //Bad user enters
+      cy.get('.good').contains(`Welcome ${badUserTest.name}`)
+
+      //Bad user tries to delete other blog
+      cy.get('#show-more').click()
+      cy.get('.extra-info').find('button.remove').as('removeButton')
+      cy.get('@removeButton').click()
+      cy.wait(1000)
+      cy.wait(1000)
+
+      cy.request('GET', 'http://localhost:3001/api/blogs').then((response) => {
+        cy.wait(1000)
+        cy.wait(1000)
+
+        const data = response.body
+        cy.wait(1000)
+        cy.wait(1000)
+
+        expect(data).to.have.length(1)
+      })
+
+
     })
 
   })
