@@ -46,7 +46,7 @@ const Blog = ({ blog, user, removeBlog, showMessage,addLike }) => {
 
   /* console.log(blog) */
   return (
-    <div className='blogStyle'>
+    <div className='blogStyle blog' id='blog'>
       <div>
         <p className='title'>
           {blog.title}
